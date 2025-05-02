@@ -7,8 +7,8 @@ const updateTaskRoute = async (req, res) => {
   const { title, description, dueDate, status, priority } = req.body;
 
   try {
-    const updatedTask = await Task.findByIdAndUpdate(
-      taskId,
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskId, createdBy: req.user.userId },
       { title, description, dueDate, status, priority },
       { new: true }
     );
@@ -19,7 +19,7 @@ const updateTaskRoute = async (req, res) => {
       .status(200)
       .json({ message: "Task updated successfully", task: updatedTask });
   } catch (error) {
-    res.status(500).json({ message: "Error pdating task", error });
+    res.status(500).json({ message: "Error updating task", error });
   }
 };
 

@@ -4,8 +4,7 @@ const mongoose = require("mongoose");
 const signup = require("./Auth/Signup");
 const loginHandler = require("./Auth/Login");
 const createTaskRoute = require("./Routes/createTask");
-const readAllTaskRoute = require("./Routes/readTask");
-const readTaskByIdRoute = require("./Routes/readTask");
+const { readAllTaskRoute, readTaskByIdRoute } = require("./Routes/readTask");
 const updateTaskRoute = require("./Routes/updateTask");
 const deleteTaskRoute = require("./Routes/deleteTask");
 
@@ -38,18 +37,18 @@ app.get("/dashboard", authenticateToken, (req, res) => {
 
 // CRUD
 // C
-app.post("/tasks", createTaskRoute);
+app.post("/tasks", authenticateToken, createTaskRoute);
 
 // R
-app.get("/tasks", readAllTaskRoute);
+app.get("/tasks", authenticateToken, readAllTaskRoute);
 // Get a single task by ID
-app.get("tasks/:id", readTaskByIdRoute);
+app.get("/tasks/:id", authenticateToken, readTaskByIdRoute);
 
 // U
-app.put("tasks/:id", updateTaskRoute);
+app.put("/tasks/:id", authenticateToken, updateTaskRoute);
 
 // D
-app.delete("/tasks/:id", deleteTaskRoute);
+app.delete("/tasks/:id", authenticateToken, deleteTaskRoute);
 
 // Start the Server
 app.listen(PORT, () => {

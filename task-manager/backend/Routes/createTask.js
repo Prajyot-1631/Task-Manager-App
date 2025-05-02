@@ -11,6 +11,7 @@ const createTaskRoute = async (req, res) => {
       dueDate,
       priority,
       status,
+      createdBy: req.user.userId,
     });
 
     await newTask.save();
