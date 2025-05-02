@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const signup = require("./Auth/Signup");
 const loginHandler = require("./Auth/Login");
+const authenticateToken = require("./middleware/authMiddleware");
 
 const app = express();
 const PORT = 8080;
@@ -19,6 +20,14 @@ mongoose
 //   Routes
 app.post("/register", signup);
 app.post("/login", loginHandler);
+
+// Example of a protected Route
+app.get("/dashboard", authenticateToken, (req, res) => {
+  res.json({
+    message: "Welcome to your dashboard!",
+    user: req.user,
+  });
+});
 
 // Start the Server
 app.listen(PORT, () => {
