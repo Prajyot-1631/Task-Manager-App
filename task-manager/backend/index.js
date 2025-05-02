@@ -1,9 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const User = require("./model/usersModel");
 const signup = require("./Auth/Signup");
-const login = require("./Auth/Login");
+const loginHandler = require("./Auth/Login");
 
 const app = express();
 const PORT = 8080;
@@ -20,7 +18,7 @@ mongoose
 
 //   Routes
 app.post("/register", signup);
-app.post("/login", login);
+app.post("/login", loginHandler);
 
 // Start the Server
 app.listen(PORT, () => {
