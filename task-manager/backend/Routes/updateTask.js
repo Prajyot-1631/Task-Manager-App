@@ -1,0 +1,26 @@
+const Task = require("../model/taskModel");
+
+// Update a Task by ID
+
+const updateTaskRoute = async (req, res) => {
+  const taskId = req.params.id;
+  const { title, description, dueDate, status, priority } = req.body;
+
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(
+      taskId,
+      { title, description, dueDate, status, priority },
+      { new: true }
+    );
+    if (!updatedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    res
+      .status(200)
+      .json({ message: "Task updated successfully", task: updatedTask });
+  } catch (error) {
+    res.status(500).json({ message: "Error pdating task", error });
+  }
+};
+
+module.exports = updateTaskRoute;
