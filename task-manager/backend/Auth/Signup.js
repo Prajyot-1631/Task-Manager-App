@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const user = require("../model/usersModel");
+const User = require("../model/usersModel");
 
 //POST Route to register a new user
 const signup = async (req, res) => {
