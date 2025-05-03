@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const signup = require("./Auth/Signup");
 const loginHandler = require("./Auth/Login");
@@ -12,6 +13,7 @@ const authenticateToken = require("./middleware/authMiddleware");
 
 const app = express();
 const PORT = 8080;
+app.use(cors());
 
 // Middleware to parse JSON data
 app.use(express.json());
