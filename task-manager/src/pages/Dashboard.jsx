@@ -30,10 +30,22 @@ const Dashboard = () => {
       });
   }, [navigate]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div>
       <h1>Dashboard</h1>
-      {user ? <p>Welcome, {user.username}!</p> : <p>Loading user info...</p>}
+      {user ? (
+        <>
+          <p>Welcome, {user.username}!</p>
+          <button onClick={handleLogout}>Logout</button>
+        </>
+      ) : (
+        <p>Loading user info ...</p>
+      )}
     </div>
   );
 };
