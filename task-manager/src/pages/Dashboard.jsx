@@ -5,6 +5,17 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [user, setUser] = useState(null); //null :- because user is not loaded yet and user is an object
   const [tasks, setTasks] = useState([]);
+  const [editTaskId, setEditTaskId] = useState("null");
+  const [editForm, setEditForm] = useState({
+    _id: "",
+    title: "",
+    description: "",
+    dueDate: "",
+    priority: "",
+    status: "todo",
+  });
+  //   TO toggle form visibility
+  const [showEditForm, setShowEditForm] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +54,19 @@ const Dashboard = () => {
       });
   }, [navigate]);
 
+  //   Fetch Task Function
+  const fetchTask = () => {
+    const token = localStorage.getItem("token");
+    axios
+      .get("http://localhost:8080/tasks", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setTasks(res.data.tasks))
+      .catch((err) => {
+        console.error("Failed to load tasks", err);
+      });
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
@@ -61,6 +85,52 @@ const Dashboard = () => {
       .catch((err) => {
         console.error("Error Deleting Task", err);
       });
+  };
+
+  const handleEditClick = (task) => {
+    setEditForm({
+      _id: task._id,
+      title: task.title,
+      description: task.description,
+      dueDate: task.dueDate,
+      priority: task.priority,
+      status: task.status,
+    });
+    setShowEditForm(true);
+  };
+
+  //   Handle Update
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.put(
+        `http://localhost:8080/tasks/${editForm._id}`,
+        {
+          title: editForm.title,
+          description: editForm.description,
+          dueDate: editForm.dueDate,
+          priority: editForm.priority,
+          status: editForm.status,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      fetchTask();
+      setEditForm({
+        _id: "",
+        title: "",
+        description: "",
+        dueDate: "",
+        priority: "",
+        status: "todo",
+      });
+      setShowEditForm(true);
+    } catch (error) {
+      console.error("Update failed", error);
+    }
   };
 
   return (
@@ -140,10 +210,67 @@ const Dashboard = () => {
               <strong>
                 {task.title} - {task.status} - {task.priority}
               </strong>
+              <button onClick={() => handleEditClick(task)}>Edit</button>
               <button onClick={() => handleDelete(task._id)}>Delete</button>
             </li>
           ))}
         </ul>
+      )}
+      {showEditForm && (
+        <form onSubmit={handleUpdate}>
+          <input
+            type="text"
+            placeholder="Title"
+            value={editForm.title}
+            onChange={(e) =>
+              setEditForm({ ...editForm, title: e.target.value })
+            }
+            required
+          />
+          <textarea
+            placeholder="Description"
+            value={editForm.description}
+            onChange={(e) =>
+              setEditForm({ ...editForm, description: e.target.value })
+            }
+            required
+          ></textarea>
+
+          <input
+            type="date"
+            value={editForm.dueDate.split("T")[0]}
+            onChange={(e) =>
+              setEditForm({ ...editForm, dueDate: e.target.value })
+            }
+            required
+          />
+
+          <select
+            value={editForm.priority}
+            onChange={(e) =>
+              setEditForm({ ...editForm, priority: e.target.value })
+            }
+            required
+          >
+            <option value="">Select Priority</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+
+          <select
+            value={editForm.status}
+            onChange={(e) =>
+              setEditForm({ ...editForm, status: e.target.value })
+            }
+            required
+          >
+            <option value="todo"></option>
+            <option value="in-progress"></option>
+            <option value="Done"></option>
+          </select>
+          <button type="submit">Update Task</button>
+        </form>
       )}
     </div>
   );
