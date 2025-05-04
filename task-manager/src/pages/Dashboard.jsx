@@ -48,6 +48,21 @@ const Dashboard = () => {
     navigate("/login");
   };
 
+  const handleDelete = (taskId) => {
+    const token = localStorage.getItem("token");
+    axios
+      .delete(`http://localhost:8080/tasks/${taskId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => {
+        // Filter out deleted task
+        setTasks((prevTask) => prevTask.filter((t) => t._id !== taskId));
+      })
+      .catch((err) => {
+        console.error("Error Deleting Task", err);
+      });
+  };
+
   return (
     <div>
       <h1>Dashboard</h1>
@@ -125,6 +140,7 @@ const Dashboard = () => {
               <strong>
                 {task.title} - {task.status} - {task.priority}
               </strong>
+              <button onClick={() => handleDelete(task._id)}>Delete</button>
             </li>
           ))}
         </ul>

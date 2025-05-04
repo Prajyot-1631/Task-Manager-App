@@ -2,7 +2,7 @@
 const Task = require("../model/taskModel");
 
 const readAllTaskRoute = async (req, res) => {
-  console.log("User making the request:", req.user.userId);
+  //   console.log("User making the request:", req.user.userId);
   try {
     const tasks = await Task.find({ createdBy: req.user.userId });
     res.status(200).json({ tasks });
