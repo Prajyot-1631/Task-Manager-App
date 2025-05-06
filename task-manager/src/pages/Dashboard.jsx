@@ -95,11 +95,21 @@ const Dashboard = () => {
   };
 
   //task filter logic for Search
-  const filteredTask = tasks.filter(
-    (task) =>
+  const filteredTask = tasks.filter((task) => {
+    //Search Logic
+    const matchesSearchTerm =
       task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      task.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      task.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+    //   Filter Logic
+    const matchesFilter =
+      (!filters.status || task.status === filters.status) &&
+      (!filters.priority || task.priority === filters.priority) &&
+      (!filters.dueDate || task.dueDate === filters.dueDate);
+
+    //   Return Task if it matches both Search and Filters
+    return matchesSearchTerm && matchesFilter;
+  });
 
   return (
     <div>
