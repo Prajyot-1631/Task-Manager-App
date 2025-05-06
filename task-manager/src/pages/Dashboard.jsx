@@ -21,6 +21,12 @@ const fetchTask = async (setTasks, navigate) => {
 };
 
 const Dashboard = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filters, setFilters] = useState({
+    status: "",
+    priority: "",
+    dueDate: "",
+  });
   const [user, setUser] = useState(null);
   //null :- because user is not loaded yet and user is an object
   const [tasks, setTasks] = useState([]);
@@ -88,6 +94,13 @@ const Dashboard = () => {
     setShowEditForm(true);
   };
 
+  //task filter logic for Search
+  const filteredTask = tasks.filter(
+    (task) =>
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       <h1>Dashboard</h1>
@@ -103,12 +116,53 @@ const Dashboard = () => {
       <h3>Create New Task</h3>
       <TaskForm onTaskCreated={() => fetchTask(setTasks, navigate)} />
 
+      <h2>Search Task</h2>
+      <input
+        type="text"
+        placeholder="Search Task..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <h2>Filter Task By:</h2>
+      <div>
+        <select
+          value={filters.status}
+          onChange={(e) =>
+            setFilters({
+              ...filters,
+              status: e.target.value,
+            })
+          }
+        >
+          <option value="">All Statuses</option>
+          <option value="todo">Pending</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+
+        <select
+          value={filters.priority}
+          onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
+        >
+          <option value="">All Priorities</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <input
+          type="date"
+          value={filters.dueDate}
+          onChange={(e) => setFilters({ ...filters, dueDate: e.target.value })}
+        />
+      </div>
+
       <h2>Your Tasks:</h2>
       {tasks.length === 0 ? (
         <p>No Task Found</p>
       ) : (
         <TaskList
-          tasks={tasks}
+          tasks={filteredTask}
           onEdit={handleEditClick}
           onDelete={handleDelete}
         />

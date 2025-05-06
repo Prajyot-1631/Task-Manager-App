@@ -1,3 +1,5 @@
+//Maps through tasks and displays each TaskItem.
+
 import TaskItem from "./TaskItem";
 
 const TaskList = ({ tasks, onEdit, onDelete }) => {

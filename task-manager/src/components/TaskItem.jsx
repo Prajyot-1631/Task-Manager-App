@@ -1,3 +1,5 @@
+//Renders individual task with edit/delete.
+
 const TaskItem = ({ task, onEdit, onDelete }) => {
   const handleEdit = () => onEdit(task);
   const handleDelete = () => onDelete(task._id);
