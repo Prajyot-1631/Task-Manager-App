@@ -8,6 +8,7 @@ const createTaskRoute = require("./Routes/createTask");
 const { readAllTaskRoute, readTaskByIdRoute } = require("./Routes/readTask");
 const updateTaskRoute = require("./Routes/updateTask");
 const deleteTaskRoute = require("./Routes/deleteTask");
+const fetchUsers = require("./Routes/fetchAllUsers");
 
 const authenticateToken = require("./middleware/authMiddleware");
 
@@ -51,6 +52,9 @@ app.put("/tasks/:id", authenticateToken, updateTaskRoute);
 
 // D
 app.delete("/tasks/:id", authenticateToken, deleteTaskRoute);
+
+// Fetch All Users
+app.get("/users", fetchUsers);
 
 // Start the Server
 app.listen(PORT, () => {

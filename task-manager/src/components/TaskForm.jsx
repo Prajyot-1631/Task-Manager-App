@@ -1,6 +1,9 @@
 import axios from "axios";
 import { getToken } from "../utils/auth";
-const TaskForm = ({ onTaskCreated }) => {
+import { useState } from "react";
+const TaskForm = ({ onTaskCreated, users }) => {
+  const [assignedTo, setAssignedTo] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const token = getToken();
@@ -11,6 +14,7 @@ const TaskForm = ({ onTaskCreated }) => {
       dueDate: e.target.dueDate.value,
       priority: e.target.priority.value,
       status: e.target.status.value,
+      assignedTo: assignedTo,
     };
 
     axios
@@ -18,8 +22,9 @@ const TaskForm = ({ onTaskCreated }) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {
-        onTaskCreated;
+        onTaskCreated();
         e.target.reset();
+        setAssignedTo("");
       })
       .catch((err) => console.error("Error Creating Task", err));
   };
@@ -43,6 +48,20 @@ const TaskForm = ({ onTaskCreated }) => {
         <option value="todo">Pending</option>
         <option value="in-progress">In Progress</option>
         <option value="done">Done</option>
+      </select>
+      <label>Assign To:</label>
+      <select
+        value={assignedTo}
+        onChange={(e) => setAssignedTo(e.target.value)}
+      >
+        <option value="">Select User</option>
+        {users.map((user) => {
+          return (
+            <option key={user._id} value={user._id}>
+              {user.username}
+            </option>
+          );
+        })}
       </select>
       <button type="submit">Create Task</button>
     </form>

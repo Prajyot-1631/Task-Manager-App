@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "../utils/auth";
 
-const TaskEditForm = ({ editForm, setEditForm, onUpdated, onClose }) => {
+const TaskEditForm = ({ editForm, setEditForm, onUpdated, onClose, users }) => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     const token = getToken();
@@ -15,6 +15,7 @@ const TaskEditForm = ({ editForm, setEditForm, onUpdated, onClose }) => {
           dueDate: editForm.dueDate,
           priority: editForm.priority,
           status: editForm.status,
+          assignedTo: editForm.assignedTo,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -70,6 +71,23 @@ const TaskEditForm = ({ editForm, setEditForm, onUpdated, onClose }) => {
         <option value="todo">Pending</option>
         <option value="in-progress">In Progress</option>
         <option value="done">Done</option>
+      </select>
+      <label>Assign To:</label>
+      <select
+        value={editForm.assignedTo || ""}
+        onChange={(e) =>
+          setEditForm({ ...editForm, assignedTo: e.target.value })
+        }
+        required
+      >
+        <option value="">Select User</option>
+        {users.map((user) => {
+          return (
+            <option key={user._id} value={user._id}>
+              {user.username}
+            </option>
+          );
+        })}
       </select>
       <button type="submit">Update Task</button>
     </form>

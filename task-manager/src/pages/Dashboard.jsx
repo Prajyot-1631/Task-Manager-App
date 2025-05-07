@@ -7,18 +7,8 @@ import TaskEditForm from "../components/TaskEditForm";
 import TaskList from "../components/TaskList";
 import { getToken } from "../utils/auth";
 
-const fetchTask = async (setTasks, navigate) => {
-  const token = getToken();
-  try {
-    const res = await axios.get("http://localhost:8080/tasks", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setTasks(res.data.tasks);
-  } catch (err) {
-    console.error("Failed to load Tasks", err);
-    if (navigate) navigate("/login");
-  }
-};
+import FetchAllUsers from "../utils/FetchAllUsers";
+import fetchTask from "../utils/fetchTask";
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,6 +30,8 @@ const Dashboard = () => {
   });
   //   To toggle form visibility
   const [showEditForm, setShowEditForm] = useState(false);
+  //   To Fetch Users
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,8 +58,17 @@ const Dashboard = () => {
         localStorage.removeItem("token");
         navigate("/login");
       });
-    fetchTask(setTasks, navigate);
+    fetchTask(navigate).then(setTasks);
   }, [navigate]);
+
+  useEffect(() => {
+    //for fetching users
+    const loadUsers = async () => {
+      const fetchedUsers = await FetchAllUsers();
+      setUsers(fetchedUsers);
+    };
+    loadUsers();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -124,7 +125,10 @@ const Dashboard = () => {
       )}
 
       <h3>Create New Task</h3>
-      <TaskForm onTaskCreated={() => fetchTask(setTasks, navigate)} />
+      <TaskForm
+        onTaskCreated={() => fetchTask(navigate).then(setTasks)}
+        users={users}
+      />
 
       <h2>Search Task</h2>
       <input
@@ -181,10 +185,19 @@ const Dashboard = () => {
         <TaskEditForm
           editForm={editForm}
           setEditForm={setEditForm}
-          onUpdated={() => fetchTask(setTasks, navigate)}
+          onUpdated={() => fetchTask(navigate).then(setTasks)}
           onClose={() => setShowEditForm(false)}
+          users={users}
         />
       )}
+      <div>
+        <h2>All Users:</h2>
+        <ul>
+          {users.map((u) => {
+            return <li key={u._id}>{u.username}</li>;
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
