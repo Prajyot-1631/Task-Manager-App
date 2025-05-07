@@ -4,12 +4,13 @@ const Task = require("../model/taskModel");
 
 const updateTaskRoute = async (req, res) => {
   const taskId = req.params.id;
-  const { title, description, dueDate, status, priority } = req.body;
+  const { title, description, dueDate, status, priority, assignedTo } =
+    req.body;
 
   try {
     const updatedTask = await Task.findOneAndUpdate(
       { _id: taskId, createdBy: req.user.userId },
-      { title, description, dueDate, status, priority },
+      { title, description, dueDate, status, priority, assignedTo },
       { new: true }
     );
     if (!updatedTask) {

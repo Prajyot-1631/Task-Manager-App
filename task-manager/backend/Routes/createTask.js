@@ -2,7 +2,8 @@ const Task = require("../model/taskModel");
 
 // Create new Task
 const createTaskRoute = async (req, res) => {
-  const { title, description, dueDate, priority, status } = req.body;
+  const { title, description, dueDate, priority, status, assignedTo } =
+    req.body;
 
   try {
     const newTask = new Task({
@@ -11,6 +12,7 @@ const createTaskRoute = async (req, res) => {
       dueDate,
       priority,
       status,
+      assignedTo,
       createdBy: req.user.userId,
     });
 
