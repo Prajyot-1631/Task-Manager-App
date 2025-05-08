@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../model/usersModel");
 
 // JWT-- later move to .env
-const JWT_SECRET = "supersecretkey";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const loginHandler = async (req, res) => {
   const { username, password } = req.body;

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -14,7 +15,7 @@ const getNotifications = require("./Routes/getNotifications");
 const authenticateToken = require("./middleware/authMiddleware");
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 app.use(cors());
 
 // Middleware to parse JSON data
@@ -23,8 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // MongoDB Connection
 mongoose
-  .connect("mongodb://localhost:27017/taskmanager")
-  .then(() => console.log("MongoDB Connected"))
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected To MongDB Server"))
   .catch((err) => console.error("MongoDB Connection Error", err));
 
 //   Routes
