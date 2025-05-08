@@ -113,33 +113,45 @@ const Dashboard = () => {
   });
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      {user ? (
-        <>
-          <p>Welcome, {user.username}!</p>
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      ) : (
-        <p>Loading user info ...</p>
-      )}
+    <div className="container my-5">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1>Dashboard</h1>
+        {user ? (
+          <>
+            <span className="me-3">Welcome, {user.username}!</span>
+            <button className="btn btn-danger" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <p>Loading user info ...</p>
+        )}
+      </div>
 
-      <h3>Create New Task</h3>
-      <TaskForm
-        onTaskCreated={() => fetchTask(navigate).then(setTasks)}
-        users={users}
-      />
+      <div className="card p-4 mb-4">
+        <h3>Create New Task</h3>
+        <TaskForm
+          onTaskCreated={() => fetchTask(navigate).then(setTasks)}
+          users={users}
+        />
+      </div>
 
-      <h2>Search Task</h2>
-      <input
-        type="text"
-        placeholder="Search Task..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <div className="card p-4 mb-4">
+        <h2>Search Task</h2>
+        <input
+          className="form-control mb-3"
+          type="text"
+          placeholder="Search Task..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <h2>Filter Task By:</h2>
-      <div>
+      <div className="row g-3">
+        <div className="col-md-4"></div>
         <select
+          className="form-select"
           value={filters.status}
           onChange={(e) =>
             setFilters({
@@ -154,42 +166,57 @@ const Dashboard = () => {
           <option value="done">Done</option>
         </select>
 
-        <select
-          value={filters.priority}
-          onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-        >
-          <option value="">All Priorities</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
+        <div className="col-md-4">
+          <select
+            className="form-select"
+            value={filters.priority}
+            onChange={(e) =>
+              setFilters({ ...filters, priority: e.target.value })
+            }
+          >
+            <option value="">All Priorities</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
 
-        <input
-          type="date"
-          value={filters.dueDate}
-          onChange={(e) => setFilters({ ...filters, dueDate: e.target.value })}
-        />
+        <div className="col-md-4">
+          <input
+            className="form-control"
+            type="date"
+            value={filters.dueDate}
+            onChange={(e) =>
+              setFilters({ ...filters, dueDate: e.target.value })
+            }
+          />
+        </div>
       </div>
 
-      <h2>Your Tasks:</h2>
-      {tasks.length === 0 ? (
-        <p>No Task Found</p>
-      ) : (
-        <TaskList
-          tasks={filteredTask}
-          onEdit={handleEditClick}
-          onDelete={handleDelete}
-          currentUserId={user._id}
-        />
-      )}
+      <div className="card p-4 mb-4">
+        <h2>Your Tasks:</h2>
+        {tasks.length === 0 ? (
+          <p>No Task Found</p>
+        ) : (
+          <TaskList
+            tasks={filteredTask}
+            onEdit={handleEditClick}
+            onDelete={handleDelete}
+            currentUserId={user._id}
+          />
+        )}
+      </div>
+
       {showEditForm && (
-        <TaskEditForm
-          editForm={editForm}
-          setEditForm={setEditForm}
-          onUpdated={() => fetchTask(navigate).then(setTasks)}
-          onClose={() => setShowEditForm(false)}
-          users={users}
-        />
+        <div className="card p-4 mb-4">
+          <TaskEditForm
+            editForm={editForm}
+            setEditForm={setEditForm}
+            onUpdated={() => fetchTask(navigate).then(setTasks)}
+            onClose={() => setShowEditForm(false)}
+            users={users}
+          />
+        </div>
       )}
       {/* <div>                        //show all users
         <h2>All Users:</h2>

@@ -4,19 +4,18 @@ import TaskItem from "./TaskItem";
 
 const TaskList = ({ tasks, onEdit, onDelete, currentUserId }) => {
   return (
-    <ul>
-      {tasks.map((task) => {
-        return (
+    <div className="row g-4">
+      {tasks.map((task) => (
+        <div key={task._id} className="col-md-6 col-lg-4">
           <TaskItem
-            key={task._id}
             task={task}
             onEdit={onEdit}
             onDelete={onDelete}
             currentUserId={currentUserId}
           />
-        );
-      })}
-    </ul>
+        </div>
+      ))}
+    </div>
   );
 };
 
