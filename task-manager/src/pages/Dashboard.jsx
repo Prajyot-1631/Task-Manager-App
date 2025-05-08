@@ -45,7 +45,7 @@ const Dashboard = () => {
     }
 
     axios
-      .get("http://localhost:8080/dashboard", {
+      .get("https://task-manager-app-4ivg.onrender.com/dashboard", {
         headers: {
           //Attaches an Authorization header with JWT Token
           Authorization: `Bearer ${token}`,
@@ -66,9 +66,12 @@ const Dashboard = () => {
   const fetchNotifications = async () => {
     const token = getToken();
     try {
-      const response = await axios.get("http://localhost:8080/notifications", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "https://task-manager-app-4ivg.onrender.com/notifications",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setNotifications(response.data.notifications);
     } catch (error) {
       console.error("Error fetching notifications", error);
@@ -92,7 +95,7 @@ const Dashboard = () => {
   const handleDelete = (taskId) => {
     const token = getToken();
     axios
-      .delete(`http://localhost:8080/tasks/${taskId}`, {
+      .delete(`https://task-manager-app-4ivg.onrender.com/tasks/${taskId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {

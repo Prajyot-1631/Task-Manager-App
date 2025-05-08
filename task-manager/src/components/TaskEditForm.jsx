@@ -8,7 +8,7 @@ const TaskEditForm = ({ editForm, setEditForm, onUpdated, onClose, users }) => {
 
     try {
       await axios.put(
-        `http://localhost:8080/tasks/${editForm._id}`,
+        `https://task-manager-app-4ivg.onrender.com/tasks/${editForm._id}`,
         {
           title: editForm.title,
           description: editForm.description,

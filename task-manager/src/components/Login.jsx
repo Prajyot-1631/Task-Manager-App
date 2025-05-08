@@ -10,11 +10,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/login", {
-        //later change this with actual login url
-        username,
-        password,
-      });
+      const res = await axios.post(
+        "https://task-manager-app-4ivg.onrender.com/login",
+        {
+          //later change this with actual login url
+          username,
+          password,
+        }
+      );
       alert("Login Successful");
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");

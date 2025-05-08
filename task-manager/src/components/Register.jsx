@@ -11,12 +11,15 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/register", {
-        //later change this with actual register url
-        username,
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "https://task-manager-app-4ivg.onrender.com/register",
+        {
+          //later change this with actual register url
+          username,
+          email,
+          password,
+        }
+      );
       console.log("Server response:", res.data);
       alert("User Registered Successfully");
       navigate("/login");
