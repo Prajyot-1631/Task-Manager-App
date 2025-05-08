@@ -2,7 +2,7 @@
 
 import TaskItem from "./TaskItem";
 
-const TaskList = ({ tasks, onEdit, onDelete }) => {
+const TaskList = ({ tasks, onEdit, onDelete, currentUserId }) => {
   return (
     <ul>
       {tasks.map((task) => {
@@ -12,6 +12,7 @@ const TaskList = ({ tasks, onEdit, onDelete }) => {
             task={task}
             onEdit={onEdit}
             onDelete={onDelete}
+            currentUserId={currentUserId}
           />
         );
       })}

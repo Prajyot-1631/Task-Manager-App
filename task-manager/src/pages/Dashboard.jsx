@@ -179,6 +179,7 @@ const Dashboard = () => {
           tasks={filteredTask}
           onEdit={handleEditClick}
           onDelete={handleDelete}
+          currentUserId={user._id}
         />
       )}
       {showEditForm && (
@@ -190,14 +191,14 @@ const Dashboard = () => {
           users={users}
         />
       )}
-      <div>
+      {/* <div>                        //show all users
         <h2>All Users:</h2>
         <ul>
           {users.map((u) => {
             return <li key={u._id}>{u.username}</li>;
           })}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
