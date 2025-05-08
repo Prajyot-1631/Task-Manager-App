@@ -21,6 +21,7 @@ const Login = () => {
     } catch (error) {
       alert(error.response?.data?.message || "Login failed");
       console.error("Login error", error);
+      navigate("/register");
     }
   };
 

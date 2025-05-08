@@ -11,6 +11,7 @@ import FetchAllUsers from "../utils/FetchAllUsers";
 import fetchTask from "../utils/fetchTask";
 
 const Dashboard = () => {
+  const [notifications, setNotifications] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     status: "",
@@ -59,7 +60,20 @@ const Dashboard = () => {
         navigate("/login");
       });
     fetchTask(navigate).then(setTasks);
+    fetchNotifications();
   }, [navigate]);
+
+  const fetchNotifications = async () => {
+    const token = getToken();
+    try {
+      const response = await axios.get("http://localhost:8080/notifications", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setNotifications(response.data.notifications);
+    } catch (error) {
+      console.error("Error fetching notifications", error);
+    }
+  };
 
   useEffect(() => {
     //for fetching users
@@ -125,6 +139,22 @@ const Dashboard = () => {
           </>
         ) : (
           <p>Loading user info ...</p>
+        )}
+      </div>
+
+      {/* To Load Notifications */}
+      <div className="card p-4 mb-4">
+        <h2>Notifications:</h2>
+        {notifications.length === 0 ? (
+          <p>No notifications.</p>
+        ) : (
+          <ul className="list-group">
+            {notifications.map((n) => (
+              <li key={n._id} className="list-group-item">
+                {n.message}
+              </li>
+            ))}
+          </ul>
         )}
       </div>
 

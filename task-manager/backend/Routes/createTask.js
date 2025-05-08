@@ -1,4 +1,5 @@
 const Task = require("../model/taskModel");
+const Notification = require("../model/notificationModel");
 
 // Create new Task
 const createTaskRoute = async (req, res) => {
@@ -17,6 +18,12 @@ const createTaskRoute = async (req, res) => {
     });
 
     await newTask.save();
+    if (assignedTo && assignedTo !== req.user.userId) {
+      await Notification.create({
+        recipient: assignedTo,
+        message: `You have been assigned a new task: ${title}`,
+      });
+    }
     res
       .status(201)
       .json({ message: "Task created successfully", task: newTask });

@@ -9,6 +9,7 @@ const { readAllTaskRoute, readTaskByIdRoute } = require("./Routes/readTask");
 const updateTaskRoute = require("./Routes/updateTask");
 const deleteTaskRoute = require("./Routes/deleteTask");
 const fetchUsers = require("./Routes/fetchAllUsers");
+const getNotifications = require("./Routes/getNotifications");
 
 const authenticateToken = require("./middleware/authMiddleware");
 
@@ -52,6 +53,9 @@ app.put("/tasks/:id", authenticateToken, updateTaskRoute);
 
 // D
 app.delete("/tasks/:id", authenticateToken, deleteTaskRoute);
+
+// Get Notifications Route
+app.get("/notifications", authenticateToken, getNotifications);
 
 // Fetch All Users
 app.get("/users", fetchUsers);
